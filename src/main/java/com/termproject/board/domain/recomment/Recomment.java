@@ -1,5 +1,6 @@
 package com.termproject.board.domain.recomment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.termproject.board.domain.comment.Comment;
 import com.termproject.board.domain.common.BaseTimeEntity;
 import com.termproject.board.domain.user.User;
@@ -25,12 +26,14 @@ public class Recomment extends BaseTimeEntity {
     private String content;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
     private int likes;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "comment_id")
     private Comment comment;
 

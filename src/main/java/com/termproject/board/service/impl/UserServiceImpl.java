@@ -2,10 +2,12 @@ package com.termproject.board.service.impl;
 
 
 import com.termproject.board.domain.board.Board;
+import com.termproject.board.domain.comment.Comment;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.RequestUserDto;
 import com.termproject.board.dto.ResponseBoardDto;
+import com.termproject.board.dto.ResponseCommentDto;
 import com.termproject.board.dto.ResponseDto;
 import com.termproject.board.exception.ExceptionNamingHandler;
 import com.termproject.board.service.UserService;
@@ -69,6 +71,20 @@ public class UserServiceImpl implements UserService {
         boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board.getTitle(), board.getContent(), board.getLikes())));
 
         return responseBoards;
+    }
+
+    public List<ResponseCommentDto> getAllCommentsByUser(User user){
+        List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
+        List<Comment> comments = new ArrayList<>();
+        for (int i = 0; i < boards.size(); i++) {
+            for (int j = 0;  j< boards.get(i).getComments().size(); j++) {
+                comments.add(boards.get(i).getComments().get(j));
+            }
+        }
+        List<ResponseCommentDto> responseComments = new ArrayList<>();
+        comments.stream().forEach(comment -> responseComments.add(new ResponseCommentDto(comment)));
+
+        return responseComments;
     }
 
 }
