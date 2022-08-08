@@ -6,6 +6,8 @@ import com.termproject.board.domain.board.BoardLike;
 import com.termproject.board.domain.board.BoardLikeRepository;
 import com.termproject.board.domain.board.BoardRepository;
 import com.termproject.board.domain.comment.Comment;
+import com.termproject.board.domain.comment.CommentLike;
+import com.termproject.board.domain.comment.CommentLikeRepository;
 import com.termproject.board.domain.comment.CommentRepository;
 import com.termproject.board.domain.recomment.Recomment;
 import com.termproject.board.domain.recomment.RecommentRepository;
@@ -42,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private CommentLikeRepository commentLikeRepository;
 
     @Autowired
     private RecommentRepository recommentRepository;
@@ -90,12 +95,32 @@ public class UserServiceImpl implements UserService {
         return responseBoards;
     }
 
+    public List<ResponseBoardDto> getAllLikeBoardsByUser(User user){
+        List<BoardLike> boardlikes = boardLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like boards by user"));
+        List<Board> boards = new ArrayList<>();
+        boardlikes.forEach(boardLike -> boards.add(boardLike.getBoard()));
+        List<ResponseBoardDto> responseBoards = new ArrayList<>();
+        boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board)));
+
+        return responseBoards;
+    }
+
     public List<ResponseCommentDto> getAllCommentsByUser(User user){
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<Comment> comments = new ArrayList<>();
         for (int i = 0; i < boards.size(); i++) {
             comments.addAll(boards.get(i).getComments());
         }
+        List<ResponseCommentDto> responseComments = new ArrayList<>();
+        comments.forEach(comment -> responseComments.add(new ResponseCommentDto(comment)));
+
+        return responseComments;
+    }
+
+    public List<ResponseCommentDto> getAlllikeCommentsByUser(User user){
+        List<CommentLike> commentLikes = commentLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like comments by user"));
+        List<Comment> comments = new ArrayList<>();
+        commentLikes.forEach(commentLike -> comments.add(commentLike.getComment()));
         List<ResponseCommentDto> responseComments = new ArrayList<>();
         comments.forEach(comment -> responseComments.add(new ResponseCommentDto(comment)));
 
@@ -111,15 +136,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public List<ResponseBoardDto> getAllLikeBoardsByUser(User user){
-        List<BoardLike> boardlikes = boardLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like boards by user"));
-        List<Board> boards = new ArrayList<>();
-        boardlikes.forEach(boardLike -> boards.add(boardLike.getBoard()));
-        List<ResponseBoardDto> responseBoards = new ArrayList<>();
-        boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board)));
 
-        return responseBoards;
-    }
 
 
 

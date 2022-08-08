@@ -53,13 +53,18 @@ public class TestApiController {
     }
 
     @GetMapping("/test/user/like/boards")
-    public List<ResponseBoardDto> getlikeBoards(HttpServletRequest request){
+    public List<ResponseBoardDto> getLikeBoards(HttpServletRequest request){
         return userService.getAllLikeBoardsByUser(getUser(request));
     }
 
     @GetMapping("/test/user/comments")
     public List<ResponseCommentDto> getComments(HttpServletRequest request){
         return userService.getAllCommentsByUser(getUser(request));
+    }
+
+    @GetMapping("/test/user/like/comments")
+    public List<ResponseCommentDto> getLikeComments(HttpServletRequest request){
+        return userService.getAlllikeCommentsByUser(getUser(request));
     }
 
     @GetMapping("/test/user/recomments")
