@@ -1,9 +1,11 @@
 package com.termproject.board.service.impl;
 
 
+import com.termproject.board.domain.board.Board;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.RequestUserDto;
+import com.termproject.board.dto.ResponseBoardDto;
 import com.termproject.board.dto.ResponseDto;
 import com.termproject.board.exception.ExceptionNamingHandler;
 import com.termproject.board.service.UserService;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,6 +61,14 @@ public class UserServiceImpl implements UserService {
         Pattern pattern = Pattern.compile(regex);
         Matcher m = pattern.matcher(str);
         return m.find();
+    }
+
+    public List<ResponseBoardDto> getAllBoardsByUser(User user){
+        List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
+        List<ResponseBoardDto> responseBoards = new ArrayList<>();
+        boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board.getTitle(), board.getContent(), board.getLikes())));
+
+        return responseBoards;
     }
 
 }
