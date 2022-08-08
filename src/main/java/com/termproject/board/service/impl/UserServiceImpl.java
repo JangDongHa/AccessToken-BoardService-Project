@@ -2,7 +2,11 @@ package com.termproject.board.service.impl;
 
 
 import com.termproject.board.domain.board.Board;
+import com.termproject.board.domain.board.BoardLike;
+import com.termproject.board.domain.board.BoardLikeRepository;
+import com.termproject.board.domain.board.BoardRepository;
 import com.termproject.board.domain.comment.Comment;
+import com.termproject.board.domain.comment.CommentRepository;
 import com.termproject.board.domain.recomment.Recomment;
 import com.termproject.board.domain.recomment.RecommentRepository;
 import com.termproject.board.domain.user.User;
@@ -31,7 +35,18 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardLikeRepository boardLikeRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private RecommentRepository recommentRepository;
+
+
 
     @Transactional
     @Override
@@ -93,6 +108,17 @@ public class UserServiceImpl implements UserService {
 
         recomments.forEach(recomment -> responseRecomments.add(new ResponseRecommentDto(recomment)));
         return responseRecomments;
+    }
+
+
+    public List<ResponseBoardDto> getAllLikeBoardsByUser(User user){
+        List<BoardLike> boardlikes = boardLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like boards by user"));
+        List<Board> boards = new ArrayList<>();
+        boardlikes.forEach(boardLike -> boards.add(boardLike.getBoard()));
+        List<ResponseBoardDto> responseBoards = new ArrayList<>();
+        boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board)));
+
+        return responseBoards;
     }
 
 

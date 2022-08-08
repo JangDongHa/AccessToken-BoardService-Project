@@ -52,6 +52,11 @@ public class TestApiController {
         return userService.getAllBoardsByUser(getUser(request));
     }
 
+    @GetMapping("/test/user/like/boards")
+    public List<ResponseBoardDto> getlikeBoards(HttpServletRequest request){
+        return userService.getAllLikeBoardsByUser(getUser(request));
+    }
+
     @GetMapping("/test/user/comments")
     public List<ResponseCommentDto> getComments(HttpServletRequest request){
         return userService.getAllCommentsByUser(getUser(request));

@@ -13,6 +13,10 @@ public class ResponseBoardDto {
     private String content;
     private int likes;
 
+    public ResponseBoardDto(Board board){
+        setData(board);
+    }
+
     public void setData(Board board){
         this.title = board.getTitle();
         this.content = board.getContent();
