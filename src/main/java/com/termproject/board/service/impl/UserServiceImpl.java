@@ -3,12 +3,11 @@ package com.termproject.board.service.impl;
 
 import com.termproject.board.domain.board.Board;
 import com.termproject.board.domain.comment.Comment;
+import com.termproject.board.domain.recomment.Recomment;
+import com.termproject.board.domain.recomment.RecommentRepository;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
-import com.termproject.board.dto.RequestUserDto;
-import com.termproject.board.dto.ResponseBoardDto;
-import com.termproject.board.dto.ResponseCommentDto;
-import com.termproject.board.dto.ResponseDto;
+import com.termproject.board.dto.*;
 import com.termproject.board.exception.ExceptionNamingHandler;
 import com.termproject.board.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RecommentRepository recommentRepository;
 
     @Transactional
     @Override
@@ -77,14 +79,22 @@ public class UserServiceImpl implements UserService {
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<Comment> comments = new ArrayList<>();
         for (int i = 0; i < boards.size(); i++) {
-            for (int j = 0;  j< boards.get(i).getComments().size(); j++) {
-                comments.add(boards.get(i).getComments().get(j));
-            }
+            comments.addAll(boards.get(i).getComments());
         }
         List<ResponseCommentDto> responseComments = new ArrayList<>();
-        comments.stream().forEach(comment -> responseComments.add(new ResponseCommentDto(comment)));
+        comments.forEach(comment -> responseComments.add(new ResponseCommentDto(comment)));
 
         return responseComments;
     }
+
+    public List<ResponseRecommentDto> getAllRecommentByUser(User user){
+        List<Recomment> recomments = recommentRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find recomments by user"));
+        List<ResponseRecommentDto> responseRecomments = new ArrayList<>();
+
+        recomments.forEach(recomment -> responseRecomments.add(new ResponseRecommentDto(recomment)));
+        return responseRecomments;
+    }
+
+
 
 }

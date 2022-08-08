@@ -57,6 +57,11 @@ public class TestApiController {
         return userService.getAllCommentsByUser(getUser(request));
     }
 
+    @GetMapping("/test/user/recomments")
+    public List<ResponseRecommentDto> getRecomments(HttpServletRequest request){
+        return userService.getAllRecommentByUser(getUser(request));
+    }
+
     private User getUser(HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String username = requestToken.getUsername().orElseThrow(()->new IllegalArgumentException("Can not find username"));
