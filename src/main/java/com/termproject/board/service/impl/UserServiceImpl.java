@@ -10,6 +10,8 @@ import com.termproject.board.domain.comment.CommentLike;
 import com.termproject.board.domain.comment.CommentLikeRepository;
 import com.termproject.board.domain.comment.CommentRepository;
 import com.termproject.board.domain.recomment.Recomment;
+import com.termproject.board.domain.recomment.RecommentLike;
+import com.termproject.board.domain.recomment.RecommentLikeRepository;
 import com.termproject.board.domain.recomment.RecommentRepository;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
@@ -51,6 +53,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RecommentRepository recommentRepository;
 
+    @Autowired
+    private RecommentLikeRepository recommentLikeRepository;
+
 
 
     @Transactional
@@ -87,6 +92,8 @@ public class UserServiceImpl implements UserService {
         return m.find();
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public List<ResponseBoardDto> getAllBoardsByUser(User user){
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<ResponseBoardDto> responseBoards = new ArrayList<>();
@@ -95,6 +102,8 @@ public class UserServiceImpl implements UserService {
         return responseBoards;
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public List<ResponseBoardDto> getAllLikeBoardsByUser(User user){
         List<BoardLike> boardlikes = boardLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like boards by user"));
         List<Board> boards = new ArrayList<>();
@@ -105,6 +114,8 @@ public class UserServiceImpl implements UserService {
         return responseBoards;
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public List<ResponseCommentDto> getAllCommentsByUser(User user){
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<Comment> comments = new ArrayList<>();
@@ -117,7 +128,9 @@ public class UserServiceImpl implements UserService {
         return responseComments;
     }
 
-    public List<ResponseCommentDto> getAlllikeCommentsByUser(User user){
+    @Transactional(readOnly = true)
+    @Override
+    public List<ResponseCommentDto> getAllLikeCommentsByUser(User user){
         List<CommentLike> commentLikes = commentLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like comments by user"));
         List<Comment> comments = new ArrayList<>();
         commentLikes.forEach(commentLike -> comments.add(commentLike.getComment()));
@@ -127,11 +140,25 @@ public class UserServiceImpl implements UserService {
         return responseComments;
     }
 
+    @Transactional(readOnly = true)
+    @Override
     public List<ResponseRecommentDto> getAllRecommentByUser(User user){
         List<Recomment> recomments = recommentRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find recomments by user"));
         List<ResponseRecommentDto> responseRecomments = new ArrayList<>();
 
         recomments.forEach(recomment -> responseRecomments.add(new ResponseRecommentDto(recomment)));
+        return responseRecomments;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ResponseRecommentDto> getAllLikeRecommentByUser(User user){
+        List<RecommentLike> recommentLikes = recommentLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like recomments by user"));
+        List<Recomment> recomments = new ArrayList<>();
+        recommentLikes.forEach(recommentLike -> recomments.add(recommentLike.getRecomment()));
+        List<ResponseRecommentDto> responseRecomments = new ArrayList<>();
+        recomments.forEach(recomment -> responseRecomments.add(new ResponseRecommentDto(recomment)));
+
         return responseRecomments;
     }
 

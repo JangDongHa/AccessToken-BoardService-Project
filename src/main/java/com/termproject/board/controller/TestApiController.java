@@ -47,29 +47,34 @@ public class TestApiController {
         return new ResponseDto<>(HttpStatus.OK, "완료");
     }
 
-    @GetMapping("/test/user/boards")
+    @GetMapping("/test/user/boards") // /api/user/boards
     public List<ResponseBoardDto> getBoards(HttpServletRequest request){
         return userService.getAllBoardsByUser(getUser(request));
     }
 
-    @GetMapping("/test/user/like/boards")
+    @GetMapping("/test/user/like/boards") // /api/user/like/boards
     public List<ResponseBoardDto> getLikeBoards(HttpServletRequest request){
         return userService.getAllLikeBoardsByUser(getUser(request));
     }
 
-    @GetMapping("/test/user/comments")
+    @GetMapping("/test/user/comments") // /api/user/comments
     public List<ResponseCommentDto> getComments(HttpServletRequest request){
         return userService.getAllCommentsByUser(getUser(request));
     }
 
-    @GetMapping("/test/user/like/comments")
+    @GetMapping("/test/user/like/comments") // /api/user/like/comments
     public List<ResponseCommentDto> getLikeComments(HttpServletRequest request){
-        return userService.getAlllikeCommentsByUser(getUser(request));
+        return userService.getAllLikeCommentsByUser(getUser(request));
     }
 
-    @GetMapping("/test/user/recomments")
+    @GetMapping("/test/user/recomments") // /api/user/recomments
     public List<ResponseRecommentDto> getRecomments(HttpServletRequest request){
         return userService.getAllRecommentByUser(getUser(request));
+    }
+
+    @GetMapping("/test/user/like/recomments") // /api/user/like/recomments
+    public List<ResponseRecommentDto> getLikeRecomments(HttpServletRequest request){
+        return userService.getAllLikeRecommentByUser(getUser(request));
     }
 
     private User getUser(HttpServletRequest request){
