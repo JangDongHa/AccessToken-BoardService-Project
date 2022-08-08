@@ -1,10 +1,12 @@
 package com.termproject.board.controller;
 
+import com.termproject.board.config.auth.PrincipalDetails;
 import com.termproject.board.config.jwt.token.RequestToken;
 import com.termproject.board.dto.RequestUserDto;
 import com.termproject.board.dto.ResponseDto;
 import com.termproject.board.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +31,7 @@ public class UserApiController {
     public String test(HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String username = requestToken.getUsername().orElseThrow();
-        System.out.println(username);
+
         return "<h1>Hi</h1>";
     }
 }
