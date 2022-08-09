@@ -20,6 +20,7 @@ public class UserApiController {
     @Autowired
     private UserServiceImpl userService;
 
+
     @PostMapping("/api/user/join")
     public ResponseDto<String> joinUser(@RequestBody RequestUserDto requestUserDto){
         return userService.joinUser(requestUserDto);
