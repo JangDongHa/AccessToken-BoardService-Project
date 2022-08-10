@@ -20,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class BoardServiceImpl {
     @Autowired
@@ -80,21 +78,6 @@ public class BoardServiceImpl {
 
     }
 
-    @Transactional
-    public void unlikeBoard(long boardId, User user){
-        Board board = boardRepository
-                .findById(boardId)
-                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
-        BoardLike boardLike = BoardLike.builder()
-                .board(board)
-                .user(user).build();
-        boardLikeRepository.save(boardLike);
-        board.setLikes(board.getLikes() - 1);
-
-    }
-
-
-
 
 
     @Transactional
@@ -112,18 +95,6 @@ public class BoardServiceImpl {
 
 
     @Transactional
-    public void unikeComment(long commentId, User user){
-        Comment comment = commentRepository
-                .findById(commentId)
-                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
-        CommentLike commentLike = CommentLike.builder()
-                .comment(comment)
-                .user(user).build();
-        commentLikeRepository.save(commentLike);
-        comment.setLikes(comment.getLikes() - 1);
-    }
-
-    @Transactional
     public void likeRecomment(long recommentId, User user){
         Recomment recomment = recommentRepository
                 .findById(recommentId)
@@ -136,17 +107,6 @@ public class BoardServiceImpl {
     }
 
 
-    @Transactional
-    public void unlikeRecomment(long recommentId, User user){
-        Recomment recomment = recommentRepository
-                .findById(recommentId)
-                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
-        RecommentLike recommentLike = RecommentLike.builder()
-                .recomment(recomment)
-                .user(user).build();
-        recommentLikeRepository.save(recommentLike);
-        recomment.setLikes(recomment.getLikes() - 1);
-    }
 
 
 

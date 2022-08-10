@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface RecommentRepository extends JpaRepository<Recomment, Long> {
     Optional<List<Recomment>> findAllByUser(User user);
+
+
 }

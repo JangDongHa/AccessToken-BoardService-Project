@@ -13,10 +13,12 @@ import com.termproject.board.domain.recomment.Recomment;
 import com.termproject.board.domain.recomment.RecommentLike;
 import com.termproject.board.domain.recomment.RecommentLikeRepository;
 import com.termproject.board.domain.recomment.RecommentRepository;
+import com.termproject.board.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 
 @Service
@@ -37,6 +39,8 @@ public class LikeService {
 
     private final RecommentRepository recommentRepository;
 
+
+
 //    public Optional<PostTest> add(Long id){
 //        PostTest test = new PostTest(1L,0L);     // test용 코드 추후 repository 변경
 //        test.setLikes(test.getLikes()+1L);
@@ -55,93 +59,101 @@ public class LikeService {
 //
 //    }
 
+    //get like test
 
 
-
-    public void likeBoard(Long id){
+    public String likeBoard(long boardId, User user) {
         Board board = boardRepository
-                .findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Can not find this board"));
-        BoardLike boardLike = BoardLike.builder()
-                .board(board)
-                .user(board.getUser()).build();
-        boardLikeRepository.save(boardLike);
-        board.setLikes(board.getLikes() + 1);
+                .findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find board"));
 
+        List<BoardLike> list= boardLikeRepository.findByUserIdAndBoardId((Long)user.getId(), (Long)boardId);
+
+        if (list.size() == 0){ //
+            BoardLike boardLike = BoardLike.builder()
+                    .user(user)
+                    .board(board)
+                    .build();
+
+            boardLikeRepository.save(boardLike);
+            board.setLikes(board.getLikes() + 1);
+            return "좋아요를 등록완료했습니다";
+
+
+
+        }else {
+
+            boardLikeRepository.deleteAllByBoardIdAndUserId((Long)boardId, (Long)user.getId());
+            board.setLikes(board.getLikes() -1);
+            return "좋아요를 취소하였습니다";
+
+        }
     }
 
 
-    public void unlikeBoard(Long id){
-        Board board = boardRepository
-                .findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Can not find this board"));
-        BoardLike boardLike = BoardLike.builder()
-                .board(board)
-                .user(board.getUser()).build();
-        boardLikeRepository.save(boardLike);
-        board.setLikes(board.getLikes() - 1);
 
-    }
-
-
-
-
-
-
-    public void likeComment(Long id){
+    public String likeComment(Long id, User user) {
         Comment comment = commentRepository
                 .findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Can not find this comment"));
-        CommentLike commentLike = CommentLike.builder()
-                .comment(comment)
-                .user(comment.getUser()).build();
-        commentLikeRepository.save(commentLike);
-        comment.setLikes(comment.getLikes() + 1);
+                .orElseThrow(() -> new IllegalArgumentException("Can not find this comment"));
+
+
+        List<CommentLike> list= commentLikeRepository.findByUserIdAndCommentId(user.getId(), id);
+
+        if (list.size() == 0){ //
+            CommentLike commentLike = CommentLike.builder()
+                    .user(user)
+                    .comment(comment)
+                    .build();
+
+            commentLikeRepository.save(commentLike);
+            comment.setLikes(comment.getLikes() + 1);
+            return "좋아요를 댓글에 등록완료했습니다";
+
+
+
+        }else {
+
+            commentLikeRepository.deleteAllByUserIdAndCommentId(user.getId(),id);
+            comment.setLikes(comment.getLikes() -1);
+            return "좋아요를 댓글에서 취소하였습니다";
+
+        }
+
+
     }
 
 
-
-
-    public void unikeComment(Long id){
-        Comment comment = commentRepository
-                .findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Can not find this comment"));
-        CommentLike commentLike = CommentLike.builder()
-                .comment(comment)
-                .user(comment.getUser()).build();
-        commentLikeRepository.save(commentLike);
-        comment.setLikes(comment.getLikes() - 1);
-    }
-
-
-    public void likeRecomment(Long id){
+    public String likeRecomment(Long id, User user) {
         Recomment recomment = recommentRepository
                 .findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
-        RecommentLike recommentLike = RecommentLike.builder()
-                .recomment(recomment)
-                .user(recomment.getUser()).build();
-        recommentLikeRepository.save(recommentLike);
-        recomment.setLikes(recomment.getLikes() + 1);
+                .orElseThrow(() -> new IllegalArgumentException("Can not find this comment"));
+
+
+        List<RecommentLike> list = recommentLikeRepository.findByUserIdAndRecommentId(user.getId(), recomment.getId());
+
+        if (list.size() == 0) { //
+            RecommentLike recommentLike = RecommentLike.builder()
+                    .recomment(recomment)
+                    .user(user).build();
+
+            recommentLikeRepository.save(recommentLike);
+            recomment.setLikes(recomment.getLikes() + 1);
+            return "좋아요를 대댓글에 등록완료했습니다";
+
+
+        } else {
+
+            recommentLikeRepository.deleteAllByUserIdAndRecommentId(user.getId(), recomment.getId());
+            recomment.setLikes(recomment.getLikes() -1);
+
+
+            return "좋아요를 대댓글에서 취소하였습니다";
+
+
+
+
+        }
+
     }
-
-
-
-    public void unlikeRecomment(Long id){
-        Recomment recomment = recommentRepository
-                .findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
-        RecommentLike recommentLike = RecommentLike.builder()
-                .recomment(recomment)
-                .user(recomment.getUser()).build();
-        recommentLikeRepository.save(recommentLike);
-        recomment.setLikes(recomment.getLikes() - 1);
-    }
-
-
-
-
-
-
-
 }
