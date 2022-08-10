@@ -49,6 +49,10 @@ public class TestApiController {
 
     @GetMapping("/test/user/boards") // /api/user/boards
     public List<ResponseBoardDto> getBoards(HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow(); // String 형을 반환을 해요
+        User user = userRepository.findByUsername(username).orElseThrow(); // Users 객체를 반환을 해요
+
         return userService.getAllBoardsByUser(getUser(request));
     }
 
