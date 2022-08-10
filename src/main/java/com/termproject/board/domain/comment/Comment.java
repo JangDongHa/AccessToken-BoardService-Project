@@ -1,5 +1,6 @@
 package com.termproject.board.domain.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.termproject.board.domain.board.Board;
 import com.termproject.board.domain.common.BaseTimeEntity;
@@ -28,12 +29,14 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "board_id")
     private Board board;
 
     private int likes;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 

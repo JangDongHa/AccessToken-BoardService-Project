@@ -4,7 +4,7 @@ import com.termproject.board.config.jwt.token.RequestToken;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.*;
-import com.termproject.board.service.impl.BoardServiceImpl;
+import com.termproject.board.service.impl.LikeServiceImpl;
 import com.termproject.board.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 public class TestApiController {
     @Autowired
-    private BoardServiceImpl boardService;
+    private LikeServiceImpl boardService;
 
     @Autowired
     private UserServiceImpl userService;
