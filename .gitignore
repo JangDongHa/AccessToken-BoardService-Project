@@ -1,5 +1,6 @@
 README.md
 .gradle
+
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -18,6 +19,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application.yml
 .idea
 *.iws
 *.iml
