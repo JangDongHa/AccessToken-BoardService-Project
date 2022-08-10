@@ -22,6 +22,8 @@ public class ResponseBoardDto {
 
     private List<Comment> comments;
 
+    private int commentsCount;
+
     public ResponseBoardDto(Board board){
         setData(board);
     }
@@ -33,5 +35,6 @@ public class ResponseBoardDto {
         this.comments = board.getComments();
         this.createTime = board.getCreateTime();
         this.modifiedDate = board.getModifiedDate();
+        this.commentsCount = board.getComments().size();
     }
 }
