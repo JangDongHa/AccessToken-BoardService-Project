@@ -4,15 +4,19 @@ import com.termproject.board.domain.board.Board;
 import com.termproject.board.domain.board.BoardLike;
 import com.termproject.board.domain.board.BoardLikeRepository;
 import com.termproject.board.domain.board.BoardRepository;
+import com.termproject.board.domain.comment.Comment;
+import com.termproject.board.domain.comment.CommentRepository;
+import com.termproject.board.domain.recomment.RecommentRepository;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
-import com.termproject.board.dto.ResponseBoardDto;
-import com.termproject.board.dto.ResponseDto;
+import com.termproject.board.dto.*;
 import com.termproject.board.exception.ExceptionNamingHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class BoardServiceImpl {
@@ -24,6 +28,12 @@ public class BoardServiceImpl {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private RecommentRepository recommentRepository;
 
 
 
@@ -76,4 +86,33 @@ public class BoardServiceImpl {
 
         return board.getLikes();
     }
+
+    @Transactional
+    public void postBoard(RequestBoardDto dto, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
+        dto.setUser(user);
+        boardRepository.save(dto.toBoard());
+    }
+
+    @Transactional
+    public void postComment(RequestCommentDto dto, String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
+        dto.setUser(user);
+        Board board = boardRepository
+                .findById(dto.getBoardId())
+                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
+        commentRepository.save(dto.toComment(board));
+
+    }
+
+    @Transactional
+    public void postRecomment(RequestRecommentDto dto, String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
+        dto.setUser(user);
+        Comment comment = commentRepository
+                .findById(dto.getCommentId())
+                .orElseThrow(()->new IllegalArgumentException("Can not find comment"));
+        recommentRepository.save(dto.toRecomment(comment));
+    }
+
 }

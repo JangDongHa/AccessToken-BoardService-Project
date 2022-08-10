@@ -41,26 +41,6 @@ public class LikeServiceImpl {
     private RecommentLikeRepository recommentLikeRepository;
 
 
-    @Transactional
-    public void postBoard(RequestBoardDto dto){
-        boardRepository.save(dto.toBoard());
-    }
-
-    @Transactional
-    public void postComment(RequestCommentDto dto){
-        Board board = boardRepository
-                .findById(dto.getBoardId())
-                .orElseThrow(()->new IllegalArgumentException("Can not find board"));
-        commentRepository.save(dto.toComment(board));
-    }
-
-    @Transactional
-    public void postRecomment(RequestRecommentDto dto){
-        Comment comment = commentRepository
-                .findById(dto.getCommentId())
-                .orElseThrow(()->new IllegalArgumentException("Can not find comment"));
-        recommentRepository.save(dto.toRecomment(comment));
-    }
 
     @Transactional
     public void likeBoard(long boardId, User user){

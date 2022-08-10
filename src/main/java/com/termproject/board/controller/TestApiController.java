@@ -4,6 +4,7 @@ import com.termproject.board.config.jwt.token.RequestToken;
 import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.*;
+import com.termproject.board.service.impl.BoardServiceImpl;
 import com.termproject.board.service.impl.LikeServiceImpl;
 import com.termproject.board.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,10 @@ import java.util.List;
 @RestController
 public class TestApiController {
     @Autowired
-    private LikeServiceImpl boardService;
+    private BoardServiceImpl boardService;
+
+    @Autowired
+    private LikeServiceImpl likeService;
 
     @Autowired
     private UserServiceImpl userService;
@@ -32,18 +36,18 @@ public class TestApiController {
         RequestCommentDto requestCommentDto = new RequestCommentDto("코멘트내용테스트", user, 1);
         RequestRecommentDto requestRecommentDto = new RequestRecommentDto("리코멘트내용테스트", user, 1);
 
-        boardService.postBoard(requestBoardDto);
-        boardService.postComment(requestCommentDto);
-        boardService.postRecomment(requestRecommentDto);
+        boardService.postBoard(requestBoardDto, "jdh3340");
+        boardService.postComment(requestCommentDto, "jdh3340");
+        boardService.postRecomment(requestRecommentDto, "jdh3340");
         return new ResponseDto<>(HttpStatus.OK, "완료");
     }
 
     @GetMapping("/test/like")
     public ResponseDto<String> likeAll(HttpServletRequest request){
         User user = getUser(request);
-        boardService.likeBoard(1, user);
-        boardService.likeComment(1, user);
-        boardService.likeRecomment(1, user);
+        likeService.likeBoard(1, user);
+        likeService.likeComment(1, user);
+        likeService.likeRecomment(1, user);
         return new ResponseDto<>(HttpStatus.OK, "완료");
     }
 
