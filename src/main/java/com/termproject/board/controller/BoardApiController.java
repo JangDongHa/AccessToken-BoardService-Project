@@ -1,12 +1,14 @@
 package com.termproject.board.controller;
 
 import com.termproject.board.config.jwt.token.RequestToken;
+import com.termproject.board.domain.user.User;
+import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.*;
+import com.termproject.board.service.LikeService;
 import com.termproject.board.service.impl.AwsS3ServiceImpl;
 import com.termproject.board.service.impl.BoardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -85,69 +87,97 @@ public class BoardApiController {
     }
 
 
-
-
-
-
-
+   // 게시글 수정
     @PutMapping("/api/board/{id}")
-    private ResponseEntity<String>  updateBoard(@RequestBody RequestBoardDto dto,@PathVariable Long id,HttpServletRequest request){
+    private ResponseDto<String>  updateBoard(@RequestBody RequestBoardDto dto,@PathVariable Long id,HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
         String response = boardService.updateBoard(id,dto,request);
-        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+        return new ResponseDto<>(HttpStatus.OK,name +"님 ," + response);
     }
-
+    //게시글 삭제
     @DeleteMapping("/api/board/{id}")
-    private ResponseEntity<String>  deleteBoard(@PathVariable Long id,HttpServletRequest request){
+    private ResponseDto<String>  deleteBoard(@PathVariable Long id,HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
         String response = boardService.deleteBoard(id,request);
-        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+        return new ResponseDto<>(HttpStatus.OK,name +"님 ," + response);
     }
 
+    //댓글 수정
     @PutMapping("/api/board/{boardId}/comment/{id}")
-    private ResponseEntity<String>  updateComment(@RequestBody RequestBoardDto dto,@PathVariable Long id
+    private ResponseDto<String>  updateComment(@RequestBody RequestBoardDto dto,@PathVariable Long id
                                                     ,HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
         String response = boardService.updateComment(id,dto,request);
-        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+        return new ResponseDto<>(HttpStatus.OK,name +"님 ," + response);
     }
-
+    //댓글 삭제
     @DeleteMapping("/api/board/{boardId}/comment/{id}")
-    private ResponseEntity<String>  deleteComment(@PathVariable Long id,HttpServletRequest request){
+    private ResponseDto<String>  deleteComment(@PathVariable Long id,HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
         String response = boardService.deleteComment(id,request);
-        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+        return new ResponseDto<>(HttpStatus.OK,name +"님 ," + response);
     }
-
-    @PutMapping("/api/board/{boardId}/comment/{commentId}/Recomment/{id}")
-    private ResponseEntity<String>  updateRecomment(@RequestBody RequestBoardDto dto,@PathVariable Long id,HttpServletRequest request){
+    //대댓글 수정
+    @PutMapping("/api/board/{boardId}/comment/{commentId}/recomment/{id}")
+    private ResponseDto<String>  updateRecomment(@RequestBody RequestBoardDto dto,@PathVariable Long id,HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
         String response = boardService.updateRecomment(id,dto,request);
-        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+        return new ResponseDto<>(HttpStatus.OK,name +"님 ," + response);
     }
-
-    @DeleteMapping("/api/board/{boardId}/comment/{commentId}/Recomment/{id}")
-    private ResponseEntity<String>  deleteRecomment(@PathVariable Long id,HttpServletRequest request){
+    //대댓글 삭제
+    @DeleteMapping("/api/board/{boardId}/comment/{commentId}/recomment/{id}")
+    private ResponseDto<String>  deleteRecomment(@PathVariable Long id,HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
         String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
         String response = boardService.deleteRecomment(id,request);
-        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+        return new ResponseDto<>(HttpStatus.OK,name +"님 ," + response);
     }
 
 
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
+    @GetMapping("/api/board/{boardId}/comment/{id}/like") //댓글 좋아요 & 좋아요 취소
+    public ResponseDto<String> likeComment(@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow();
+        User user = getUser(request);
+        String response = username+"님의 "+ likeService.likeComment(id,user);
+
+        return new ResponseDto<>(HttpStatus.OK, response);
+    }
 
 
+    @GetMapping("/api/board/{boardId}/comment/{commentId}/reccomment/{id}/like") //대댓글 좋아요 & 좋아요 취소
+    public ResponseDto<String> likeRecomment(@PathVariable Long id,@PathVariable Long boardId
+                                            ,@PathVariable Long commentId, HttpServletRequest request){
 
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow();
+        User user = getUser(request);
+        String response = username+"님의 "+ likeService.likeRecomment(id,user,boardId,commentId);
 
+        return new ResponseDto<>(HttpStatus.OK, response);
+    }
+
+    private User getUser(HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow(()->new IllegalArgumentException("Can not find username"));
+        return userRepository.findByUsername(username).orElseThrow();
+    }
 
 
 
 
 }
+
+

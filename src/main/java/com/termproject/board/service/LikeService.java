@@ -1,4 +1,4 @@
-package com.termproject.board.like.service;
+package com.termproject.board.service;
 
 
 import com.termproject.board.domain.board.Board;
@@ -97,10 +97,19 @@ public class LikeService {
     }
 
 
-    public String likeRecomment(Long id, User user) {
+    public String likeRecomment(Long id, User user,Long boardId,Long commentId) {
+        Board board = boardRepository
+                .findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        Comment comment = commentRepository
+                .findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+
         Recomment recomment = recommentRepository
                 .findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Can not find this comment"));
+                .orElseThrow(() -> new IllegalArgumentException("대댓글이 존재하지 않습니다."));
+
+
 
 
         List<RecommentLike> list = recommentLikeRepository.findByUserIdAndRecommentId(user.getId(), recomment.getId());

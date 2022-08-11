@@ -1,18 +1,15 @@
 package com.termproject.board.controller;
 
-import com.termproject.board.config.auth.PrincipalDetails;
 import com.termproject.board.config.jwt.token.RequestToken;
 import com.termproject.board.dto.*;
 import com.termproject.board.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -77,6 +74,6 @@ public class UserApiController {
         RequestToken requestToken = new RequestToken(request);
         String username = requestToken.getUsername().orElseThrow();
 
-        return "<h1>Hi</h1>";
+        return "<h1>"+username+"Hi</h1>";
     }
 }
