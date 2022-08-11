@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
     public List<ResponseBoardDto> getAllBoardsByUser(User user){
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<ResponseBoardDto> responseBoards = new ArrayList<>();
-        boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board.getTitle(), board.getContent(), board.getLikes())));
+        boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board)));
 
         return responseBoards;
     }
@@ -161,6 +161,7 @@ public class UserServiceImpl implements UserService {
 
         return responseRecomments;
     }
+
 
 
 

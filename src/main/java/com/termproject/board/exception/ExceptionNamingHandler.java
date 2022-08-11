@@ -9,4 +9,7 @@ public class ExceptionNamingHandler {
     public static final String TOKEN_EXPIRED = "Access Token 이 만료되었습니다.";
     public static final String TOKEN_VERIFIED_FAIL = "잘못된 Access Token 입니다.";
     public static final String NOT_LOGIN = "로그인이 필요한 서비스입니다.";
+
+    public static final String CANNOT_FIND_BOARD = "Can not find Board";
+    public static final String CANNOT_FIND_USERNAME = "Can not find username";
 }

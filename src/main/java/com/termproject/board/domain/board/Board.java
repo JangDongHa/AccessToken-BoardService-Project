@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,6 +28,8 @@ public class Board extends BaseTimeEntity {
     private String title;
 
     private String content;
+
+    private String image;
 
     private int likes;
 

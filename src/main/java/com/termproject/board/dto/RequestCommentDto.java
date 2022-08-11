@@ -19,8 +19,8 @@ public class RequestCommentDto {
 
     public Comment toComment(Board board){
         return Comment.builder()
-                .content(content)
-                .user(user)
+                .content(this.content)
+                .user(this.user)
                 .board(board)
                 .build();
     }
