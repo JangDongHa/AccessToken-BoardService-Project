@@ -32,7 +32,7 @@ jobs:
         uses: samin/mysql-action@v1
         with:
           character set server: 'utf8' 
-          mysql database: 'test-mysql'
+          mysql database: 'mysql user'
           mysql user: 'dong'
           mysql password: ${{ secrets.AWS_RDS_PASSWORD }} 
 
