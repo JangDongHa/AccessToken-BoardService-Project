@@ -2,9 +2,13 @@ server:
   port: 8080
 
 spring:
+  servlet: # max file size
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher # Spring boot 2.6 이후부터  spring.mvc.pathmatch.matching-strategy 값이 ant_apth_matcher에서 path_pattern_parser로 변경
+    path match:
+      matching-strategy: ant_path_matcher # Spring boot 2.6 이후부터  spring.mvc.pathmatch.matching-strategy 값이 ant_path_matcher에서 path_pattern_parser로 변경
   main:
     allow-circular-references: true
   datasource:
@@ -20,3 +24,32 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+    generate-ddl: true # ddl-auto 속성을 사용할지 말지
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+
+  output:
+    ansi:
+      enabled: always
+
+
+
+logging:
+  level:
+    '[org.springframework.web]': DEBUG
+    '[org.hibernate]': DEBUG
+
+# AWS S3 Bucket Access Key (IAM csv)
+cloud:
+  aws:
+    credentials:
+      access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    s3:
+      bucket: dong-example
+    region:
+      static: ${{ secrets.AWS_REGION }}
+    stack:
+      auto: false
+

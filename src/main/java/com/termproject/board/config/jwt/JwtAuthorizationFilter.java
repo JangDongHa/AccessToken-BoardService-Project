@@ -48,7 +48,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         RequestToken requestToken = new RequestToken(request);
-        //String usernameInAccessToken = requestToken.getTokenElement(requestToken.getAccessToken(), "username").orElseThrow();
 
         chain.doFilter(request, response);
 
