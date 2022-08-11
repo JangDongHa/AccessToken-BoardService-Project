@@ -7,6 +7,7 @@ import com.termproject.board.service.impl.BoardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,6 +37,12 @@ public class BoardApiController {
     public ResponseDto<String> postBoard(@RequestBody RequestBoardDto dto, HttpServletRequest request){
         boardService.postBoard(dto, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, "게시글 작성 완료");
+    }
+
+    @PostMapping("/api/board/{boardId}/upload")
+    public ResponseDto<String> postImageInBoard(@RequestParam("file") MultipartFile file, HttpServletRequest request){
+        System.out.println(file.getName());
+        return new ResponseDto<>(HttpStatus.OK, "ok");
     }
 
     @PostMapping("/api/board/{boardId}/comment")
