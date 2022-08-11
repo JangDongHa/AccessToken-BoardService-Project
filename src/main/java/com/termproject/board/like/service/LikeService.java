@@ -40,36 +40,14 @@ public class LikeService {
     private final RecommentRepository recommentRepository;
 
 
-
-//    public Optional<PostTest> add(Long id){
-//        PostTest test = new PostTest(1L,0L);     // test용 코드 추후 repository 변경
-//        test.setLikes(test.getLikes()+1L);
-//        postTestRepository.save(test);
-//
-//        return Optional.of(test);
-//
-//    }
-//
-//    public Optional<PostTest> sub(Long id){
-//        PostTest test = new PostTest(1L,0L);     // test용 코드 추후 repository 변경
-//        test.setLikes(test.getLikes()-1L);
-//        postTestRepository.save(test);
-//
-//        return Optional.of(test);
-//
-//    }
-
-    //get like test
-
-
     public String likeBoard(long boardId, User user) {
         Board board = boardRepository
                 .findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Can not find board"));
 
-        List<BoardLike> list= boardLikeRepository.findByUserIdAndBoardId((Long)user.getId(), (Long)boardId);
+        List<BoardLike> list = boardLikeRepository.findByUserIdAndBoardId( user.getId(), boardId);
 
-        if (list.size() == 0){ //
+        if (list.size() == 0) { //
             BoardLike boardLike = BoardLike.builder()
                     .user(user)
                     .board(board)
@@ -80,16 +58,14 @@ public class LikeService {
             return "좋아요를 등록완료했습니다";
 
 
-
-        }else {
-
-            boardLikeRepository.deleteAllByBoardIdAndUserId((Long)boardId, (Long)user.getId());
-            board.setLikes(board.getLikes() -1);
-            return "좋아요를 취소하였습니다";
-
         }
-    }
 
+        boardLikeRepository.deleteAllByBoardIdAndUserId( boardId, user.getId());
+        board.setLikes(board.getLikes() - 1);
+        return "좋아요를 취소하였습니다";
+
+
+    }
 
 
     public String likeComment(Long id, User user) {
@@ -98,9 +74,9 @@ public class LikeService {
                 .orElseThrow(() -> new IllegalArgumentException("Can not find this comment"));
 
 
-        List<CommentLike> list= commentLikeRepository.findByUserIdAndCommentId(user.getId(), id);
+        List<CommentLike> list = commentLikeRepository.findByUserIdAndCommentId(user.getId(), id);
 
-        if (list.size() == 0){ //
+        if (list.size() == 0) { //
             CommentLike commentLike = CommentLike.builder()
                     .user(user)
                     .comment(comment)
@@ -111,14 +87,11 @@ public class LikeService {
             return "좋아요를 댓글에 등록완료했습니다";
 
 
-
-        }else {
-
-            commentLikeRepository.deleteAllByUserIdAndCommentId(user.getId(),id);
-            comment.setLikes(comment.getLikes() -1);
-            return "좋아요를 댓글에서 취소하였습니다";
-
         }
+
+        commentLikeRepository.deleteAllByUserIdAndCommentId(user.getId(), id);
+        comment.setLikes(comment.getLikes() - 1);
+        return "좋아요를 댓글에서 취소하였습니다";
 
 
     }
@@ -142,18 +115,14 @@ public class LikeService {
             return "좋아요를 대댓글에 등록완료했습니다";
 
 
-        } else {
-
-            recommentLikeRepository.deleteAllByUserIdAndRecommentId(user.getId(), recomment.getId());
-            recomment.setLikes(recomment.getLikes() -1);
-
-
-            return "좋아요를 대댓글에서 취소하였습니다";
-
-
-
-
         }
+
+        recommentLikeRepository.deleteAllByUserIdAndRecommentId(user.getId(), recomment.getId());
+        recomment.setLikes(recomment.getLikes() - 1);
+
+
+        return "좋아요를 대댓글에서 취소하였습니다";
+
 
     }
 }

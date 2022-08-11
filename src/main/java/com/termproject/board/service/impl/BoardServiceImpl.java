@@ -132,10 +132,10 @@ public class BoardServiceImpl {
         if (board.getUser() == user) {
             board.update(dto.getTitle(), dto.getContent()); // image 추후 도입
             return "게시글 수정 성공";
-        } else {
-            return "본인의 게시글이 아닙니다.";
-
         }
+        return "본인의 게시글이 아닙니다.";
+
+
     }
 
 
@@ -148,10 +148,9 @@ public class BoardServiceImpl {
         if (board.getUser() == user) {
             boardRepository.delete(board);
             return "게시글 삭제 성공";
-        } else {
-            return "본인의 게시글이 아닙니다.";
-
         }
+        return "본인의 게시글이 아닙니다.";
+
 
     }
 
@@ -167,60 +166,55 @@ public class BoardServiceImpl {
         if (comment.getUser() == user) {
             comment.update(dto.getContent()); // image 추후 도입
             return "댓글 수정 성공";
-        } else {
-            return "본인의 댓글이 아닙니다.";
-
         }
+        return "본인의 댓글이 아닙니다.";
+
+
     }
 
     @Transactional
     public String deleteComment(Long id, HttpServletRequest request) {
 
         Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 글이 존재하지 않습니다."));
+                () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
         User user = getUser(request);
         if (comment.getUser() == user) {
             commentRepository.delete(comment);
             return "댓글 삭제 성공";
-        } else {
-            return "본인의 댓글이 아닙니다.";
-
         }
+        return "본인의 댓글이 아닙니다.";
+
 
     }
 
     @Transactional
     public String updateRecomment(Long id, RequestBoardDto dto, HttpServletRequest request) {
         Recomment recomment = recommentRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+                () -> new IllegalArgumentException("해당 대댓글이 존재하지 않습니다."));
         User user = getUser(request); // id번의 코멘트의 User id가 일치할때만 동작하게끔
         if (recomment.getUser() == user) {
             recomment.update(dto.getContent()); // image 추후 도입
             return "대댓글 수정 성공";
-        } else {
-            return "본인의 대댓글이 아닙니다.";
-
         }
+        return "본인의 대댓글이 아닙니다.";
+
+
     }
 
     @Transactional
     public String deleteRecomment(Long id, HttpServletRequest request) {
 
         Recomment recomment = recommentRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 글이 존재하지 않습니다."));
+                () -> new IllegalArgumentException("해당 대댓글이 존재하지 않습니다."));
         User user = getUser(request);
         if (recomment.getUser() == user) {
             recommentRepository.delete(recomment);
             return "대댓글 삭제 성공";
-        } else {
-            return "본인의 대댓글이 아닙니다.";
-
         }
+        return "본인의 대댓글이 아닙니다.";
+
 
     }
-
-
-
 
 
 }
