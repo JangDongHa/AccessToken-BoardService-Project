@@ -31,6 +31,9 @@ dependencies {
     implementation group: 'com.auth0', name: 'java-jwt', version: '3.16.0'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compileOnly 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation 'com.amazonaws:aws-java-sdk:1.12.272'
+
 }
 
 tasks.named('test') {

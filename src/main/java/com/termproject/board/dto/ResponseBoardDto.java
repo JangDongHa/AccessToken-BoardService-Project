@@ -3,6 +3,7 @@ package com.termproject.board.dto;
 import com.termproject.board.domain.board.Board;
 import com.termproject.board.domain.comment.Comment;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +20,8 @@ public class ResponseBoardDto {
     private String title;
     private String content;
     private int likes;
+
+    private String filePath;
 
     private List<Comment> comments;
 

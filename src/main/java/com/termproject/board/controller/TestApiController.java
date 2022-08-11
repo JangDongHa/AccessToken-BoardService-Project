@@ -32,7 +32,7 @@ public class TestApiController {
     @GetMapping("/test/post")
     public ResponseDto<String> postAll(HttpServletRequest request){
         User user = getUser(request);
-        RequestBoardDto requestBoardDto = new RequestBoardDto("제목테스트", "내용테스트", user);
+        RequestBoardDto requestBoardDto = new RequestBoardDto("제목테스트", "내용테스트", user, "");
         RequestCommentDto requestCommentDto = new RequestCommentDto("코멘트내용테스트", user, 1);
         RequestRecommentDto requestRecommentDto = new RequestRecommentDto("리코멘트내용테스트", user, 1);
 

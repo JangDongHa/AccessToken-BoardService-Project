@@ -16,11 +16,14 @@ public class RequestBoardDto {
     private String content;
     private User user;
 
+    private String imageUrl;
+
     public Board toBoard(){
         return Board.builder()
                 .title(title)
                 .content(content)
                 .user(user)
+                .image(imageUrl)
                 .build();
     }
 }

@@ -1,19 +1,24 @@
 package com.termproject.board.controller;
 
 import com.termproject.board.config.jwt.token.RequestToken;
-import com.termproject.board.config.jwt.token.ResponseToken;
 import com.termproject.board.dto.*;
+import com.termproject.board.service.impl.AwsS3ServiceImpl;
 import com.termproject.board.service.impl.BoardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @RestController
 public class BoardApiController {
     @Autowired
     private BoardServiceImpl boardService;
+
+    @Autowired
+    private AwsS3ServiceImpl awsS3Service;
 
     @GetMapping("/api/board/{boardId}")
     public ResponseDto<ResponseBoardDto> getBoard(@PathVariable long boardId){
@@ -36,6 +41,12 @@ public class BoardApiController {
     public ResponseDto<String> postBoard(@RequestBody RequestBoardDto dto, HttpServletRequest request){
         boardService.postBoard(dto, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, "게시글 작성 완료");
+    }
+
+    @PostMapping("/api/board/upload")
+    public ResponseDto<String> postImageInBoard(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+        String url = awsS3Service.uploadFileV1(file, getUsernameByRequest(request));
+        return new ResponseDto<>(HttpStatus.OK, url);
     }
 
     @PostMapping("/api/board/{boardId}/comment")
