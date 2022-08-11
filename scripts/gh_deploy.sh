@@ -29,7 +29,7 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
-nohup java -Dfile.encoding=UTF-8 -jar board-0.0.1-SNAPSHOT.jar & >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+nohup java -Dfile.encoding=UTF-8 -jar ../board-0.0.1-SNAPSHOT.jar & >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
 
 sleep 3
 
