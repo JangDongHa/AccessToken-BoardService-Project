@@ -126,4 +126,13 @@ public class BoardServiceImpl {
         return reponseBoards;
     }
 
+    @Transactional
+    public void deleteNoCommentBoards(){
+        List<Board> boards = boardRepository.findAll();
+        boards.forEach(board -> {
+            if (board.getComments().size() == 0)
+                boardRepository.delete(board);
+        });
+    }
+
 }

@@ -45,7 +45,7 @@ cloud:
   aws:
     credentials:
       access-key: AKIAVRCN6WZPYH7NNK6N
-      secret-key: vEbyFlq7LsIKcyDBbcqbcTQ1PaHKAiDxi+ixVcsD
+      secret-key:
     s3:
       bucket: dong-example
     region:

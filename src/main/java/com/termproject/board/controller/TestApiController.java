@@ -5,7 +5,7 @@ import com.termproject.board.domain.user.User;
 import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.*;
 import com.termproject.board.service.impl.BoardServiceImpl;
-import com.termproject.board.service.impl.LikeServiceImpl;
+import com.termproject.board.service.impl.TestServiceImpl;
 import com.termproject.board.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 public class TestApiController {
@@ -21,7 +20,7 @@ public class TestApiController {
     private BoardServiceImpl boardService;
 
     @Autowired
-    private LikeServiceImpl likeService;
+    private TestServiceImpl likeService;
 
     @Autowired
     private UserServiceImpl userService;
@@ -49,6 +48,13 @@ public class TestApiController {
         likeService.likeComment(1, user);
         likeService.likeRecomment(1, user);
         return new ResponseDto<>(HttpStatus.OK, "완료");
+    }
+
+
+    @GetMapping("/test/delete")
+    public ResponseDto<String> deleteTest(){
+        boardService.deleteNoCommentBoards();
+        return new ResponseDto<>(HttpStatus.OK, "삭제 완료");
     }
 
     private String getUsernameByRequest(HttpServletRequest request){
