@@ -7,7 +7,7 @@ on:
 
 env:
   S3_BUCKET_NAME: dong-example
-  RESOURCE_PATH: ./src/main/resources/application.yaml
+  RESOURCE_PATH: ./src/main/resources/application.yml
   CODE_DEPLOY_APPLICATION_NAME: ec2-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: dong-server
 
