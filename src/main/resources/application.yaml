@@ -14,8 +14,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://springboot-db.cdqff5qi8oou.ap-northeast-2.rds.amazonaws.com:3306/postdemo?serverTimezone=Asia/Seoul
-    username: ${{ secrets.AWS_RDS_USERNAME }} 
-    password: ${{ secrets.AWS_RDS_PASSWORD }} 
+    username: ${ secrets.AWS_RDS_USERNAME }
+    password: ${ secrets.AWS_RDS_PASSWORD }
 
 
   jpa:
@@ -44,12 +44,12 @@ logging:
 cloud:
   aws:
     credentials:
-      access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      access-key: ${ secrets.AWS_ACCESS_KEY_ID }
+      secret-key: ${ secrets.AWS_SECRET_ACCESS_KEY }
     s3:
       bucket: dong-example
     region:
-      static: ${{ secrets.AWS_REGION }}
+      static: ${ secrets.AWS_REGION }
     stack:
       auto: false
 
