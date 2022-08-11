@@ -12,6 +12,5 @@ public interface RecommentLikeRepository extends JpaRepository<RecommentLike, Lo
 
     List<RecommentLike>findByUserIdAndRecommentId(Long user, Long id );
 
-
     void deleteAllByUserIdAndRecommentId(Long user_id,Long recomment_id);
 }

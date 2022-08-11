@@ -45,4 +45,10 @@ public class Comment extends BaseTimeEntity {
     @OrderBy("id desc")
     private List<Recomment> recomments;
 
+
+    public void update(String content){
+        this.content = content;
+    }
+
+
 }

@@ -2,10 +2,12 @@ package com.termproject.board.controller;
 
 import com.termproject.board.config.jwt.token.RequestToken;
 import com.termproject.board.config.jwt.token.ResponseToken;
+import com.termproject.board.domain.user.User;
 import com.termproject.board.dto.*;
 import com.termproject.board.service.impl.BoardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,6 +66,69 @@ public class BoardApiController {
         RequestToken requestToken = new RequestToken(request);
         return requestToken.getUsername().orElseThrow();
     }
+
+
+
+
+
+
+
+    @PutMapping("/api/board/{id}")
+    private ResponseEntity<String>  updateBoard(@RequestBody RequestBoardDto dto,@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
+        String response = boardService.updateBoard(id,dto,request);
+        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/board/{id}")
+    private ResponseEntity<String>  deleteBoard(@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
+        String response = boardService.deleteBoard(id,request);
+        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+    }
+
+    @PutMapping("/api/board/{boardId}/comment/{id}")
+    private ResponseEntity<String>  updateComment(@RequestBody RequestBoardDto dto,@PathVariable Long id
+                                                    ,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
+        String response = boardService.updateComment(id,dto,request);
+        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/board/{boardId}/comment/{id}")
+    private ResponseEntity<String>  deleteComment(@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
+        String response = boardService.deleteComment(id,request);
+        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+    }
+
+    @PutMapping("/api/board/{boardId}/comment/{commentId}/Recomment/{id}")
+    private ResponseEntity<String>  updateRecomment(@RequestBody RequestBoardDto dto,@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
+        String response = boardService.updateRecomment(id,dto,request);
+        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/board/{boardId}/comment/{commentId}/Recomment/{id}")
+    private ResponseEntity<String>  deleteRecomment(@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String name = requestToken.getUsername().orElseThrow(() -> new IllegalArgumentException("username 확인불가"));
+        String response = boardService.deleteRecomment(id,request);
+        return new ResponseEntity<>(name +"님 ," + response , HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
 
 
 

@@ -42,5 +42,11 @@ public class Board extends BaseTimeEntity {
     @OrderBy("id desc")
     private List<Comment> comments;
 
+    public void update(String title,String content){
+        this.title = title;
+        this.content = content;
+
+    }
+
 
 }
