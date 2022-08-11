@@ -2,14 +2,21 @@ package com.termproject.board.like.controller;
 
 
 
+import com.termproject.board.config.jwt.token.RequestToken;
+import com.termproject.board.domain.board.Board;
+import com.termproject.board.domain.board.BoardLikeRepository;
+import com.termproject.board.domain.board.BoardRepository;
+import com.termproject.board.domain.user.User;
+import com.termproject.board.domain.user.UserRepository;
 import com.termproject.board.dto.ResponseDto;
 import com.termproject.board.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @RestController
@@ -17,6 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeApiController {
 
     private final LikeService likeService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
 
 
 //    @PostMapping("/api/user/like/board/{id}") // auth 검증  수정예정
@@ -35,50 +47,48 @@ public class LikeApiController {
 //        return new ResponseDto(HttpStatus.OK,test);
 //    }
 
-    @PostMapping("/api/user/like/board/{id}")
-    public ResponseDto<String> likeBoard(@PathVariable Long id){
-        likeService.likeBoard(id);
+    @GetMapping("/api/user/like/board/{id}")
+    public ResponseDto<String> likeBoard(@PathVariable long id, HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow();
 
-        return new ResponseDto<>(HttpStatus.OK, "게시글 좋아요 완료");
+        User user = getUser(request);
+        String response = username+"님의 "+ likeService.likeBoard(id,user);
+
+
+        return new ResponseDto<>(HttpStatus.OK, response);
     }
 
-    @DeleteMapping("/api/user/like/board/{id}")
-    public ResponseDto<String> unlikeBoard(@PathVariable Long id){
-        likeService.unlikeBoard(id);
 
-        return new ResponseDto<>(HttpStatus.OK, "게시글 좋아요 취소");
+
+    @GetMapping("/api/user/like/comment/{id}")
+    public ResponseDto<String> likeComment(@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow();
+        User user = getUser(request);
+        String response = username+"님의 "+ likeService.likeComment(id,user);
+
+        return new ResponseDto<>(HttpStatus.OK, response);
+    }
+
+
+    @GetMapping("/api/user/like/recomment/{id}")
+    public ResponseDto<String> likeRecomment(@PathVariable Long id,HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow();
+        User user = getUser(request);
+        String response = username+"님의 "+ likeService.likeRecomment(id,user);
+
+        return new ResponseDto<>(HttpStatus.OK, response);
+    }
+
+    private User getUser(HttpServletRequest request){
+        RequestToken requestToken = new RequestToken(request);
+        String username = requestToken.getUsername().orElseThrow(()->new IllegalArgumentException("Can not find username"));
+        return userRepository.findByUsername(username).orElseThrow();
     }
 
 
 
-
-
-    @PostMapping("/api/user/like/comment/{id}")
-    public ResponseDto<String> likeComment(@PathVariable Long id){
-        likeService.likeComment(id);
-
-        return new ResponseDto<>(HttpStatus.OK, "댓글 좋아요 완료");
-    }
-
-    @DeleteMapping("/api/user/like/comment/{id}")
-    public ResponseDto<String> unlikeComment(@PathVariable Long id){
-        likeService.unikeComment(id);
-
-        return new ResponseDto<>(HttpStatus.OK, "댓글 좋아요 취소");
-    }
-
-    @PostMapping("/api/user/like/recomment/{id}")
-    public ResponseDto<String> likeRecomment(@PathVariable Long id){
-        likeService.likeRecomment(id);
-
-        return new ResponseDto<>(HttpStatus.OK, "대댓글 좋아요 완료");
-    }
-
-    @DeleteMapping("/api/user/like/recomment/{id}")
-    public ResponseDto<String> unlikeRecomment(@PathVariable Long id){
-        likeService.unlikeRecomment(id);
-
-        return new ResponseDto<>(HttpStatus.OK, "대댓글 좋아요 취소");
-    }
 
 }

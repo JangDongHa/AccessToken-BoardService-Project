@@ -28,4 +28,6 @@ public class BoardLike extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
 }
