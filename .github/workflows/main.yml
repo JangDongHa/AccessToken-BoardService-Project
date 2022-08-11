@@ -32,13 +32,13 @@ jobs:
         uses: samin/mysql-action@v1
         with:
           character set server: 'utf8' 
-          mysql database: 'mysql user'
+          mysql database: 'test-mysql'
           mysql user: 'dong'
           mysql password: ${{ secrets.AWS_RDS_PASSWORD }} 
 
         # [2]
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -x test
         shell: bash
 
         # [3]
@@ -56,13 +56,13 @@ jobs:
 
         # [5]
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$dong-example/$GITHUB_SHA.zip
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://dong-example/$GITHUB_SHA.zip
 
         # [6]
       - name: Code Deploy
         run: | 
           aws deploy create-deployment \
+          --application-name ec2-code-deploy \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --application-name $ec2-code-deploy \
-          --deployment-group-name $dong-server \
+          --deployment-group-name dong-server \
           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip

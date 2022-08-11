@@ -29,7 +29,7 @@ spring:
       hibernate:
         default_batch_fetch_size: 1000
 
-  output: # output 색깔이 이뻐짐
+  output:
     ansi:
       enabled: always
 
@@ -52,3 +52,4 @@ cloud:
       static: ${{ secrets.AWS_REGION }}
     stack:
       auto: false
+
