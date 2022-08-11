@@ -32,9 +32,9 @@ jobs:
         uses: samin/mysql-action@v1
         with:
           character set server: 'utf8' 
-          mysql database: ${{ AWS_RDS_URL }} 
-          mysql user: ${{ AWS_RDS_USERNAME }}
-          mysql password: ${{ AWS_RDS_PASSWORD }}
+          mysql database: ${{ secrets.AWS_RDS_URL }} 
+          mysql user: ${{ secrets.AWS_RDS_USERNAME }}
+          mysql password: ${{ secrets.AWS_RDS_PASSWORD }}
 
         # [2]
       - name: Build with Gradle
