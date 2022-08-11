@@ -16,13 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set Yaml
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ${{ env.RESOURCE_PATH }} 
-        env:
-          spring.datasource.username: ${{ secrets.AWS_RDS_USERNAME }} 
-          spring.datasource.password: ${{ secrets.AWS_RDS_PASSWORD }} 
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -37,6 +30,8 @@ jobs:
           files: ${{ env.RESOURCE_PATH }}
         env:
           override.value: 'from deploy.yaml'
+          spring.datasource.username: ${{ secrets.AWS_RDS_USERNAME }} 
+          spring.datasource.password: ${{ secrets.AWS_RDS_PASSWORD }} 
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
