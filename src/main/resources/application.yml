@@ -13,7 +13,7 @@ spring:
     allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://springboot-db.cdqff5qi8oou.ap-northeast-2.rds.amazonaws.com:3306/postdemo?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://springboot-db.cdqff5qi8oou.ap-northeast-2.rds.amazonaws.com:3306/board?serverTimezone=Asia/Seoul
     username: ${ secrets.AWS_RDS_USERNAME }
     password: ${ secrets.AWS_RDS_PASSWORD }
 
