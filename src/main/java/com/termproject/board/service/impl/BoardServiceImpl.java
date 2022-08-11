@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BoardServiceImpl {
@@ -113,6 +115,15 @@ public class BoardServiceImpl {
                 .findById(dto.getCommentId())
                 .orElseThrow(()->new IllegalArgumentException("Can not find comment"));
         recommentRepository.save(dto.toRecomment(comment));
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResponseBoardDto> getAllBoardDto(){
+        List<Board> boardPS = boardRepository.findAll();
+        List<ResponseBoardDto> reponseBoards = new ArrayList<>();
+
+        boardPS.forEach(board -> reponseBoards.add(new ResponseBoardDto(board)));
+        return reponseBoards;
     }
 
 }

@@ -39,5 +39,6 @@ public class ResponseBoardDto {
         this.createTime = board.getCreateTime();
         this.modifiedDate = board.getModifiedDate();
         this.commentsCount = board.getComments().size();
+        this.filePath = board.getImage();
     }
 }

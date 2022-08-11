@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface UserService {
     ResponseDto<String> joinUser(RequestUserDto requestUserDto);
-    public List<ResponseBoardDto> getAllBoardsByUser(User user);
-    List<ResponseBoardDto> getAllLikeBoardsByUser(User user);
-    List<ResponseCommentDto> getAllCommentsByUser(User user);
-    List<ResponseCommentDto> getAllLikeCommentsByUser(User user);
-    List<ResponseRecommentDto> getAllRecommentByUser(User user);
-    List<ResponseRecommentDto> getAllLikeRecommentByUser(User user);
+    public List<ResponseBoardDto> getAllBoardsByUser(String username);
+    List<ResponseBoardDto> getAllLikeBoardsByUser(String username);
+    List<ResponseCommentDto> getAllCommentsByUser(String username);
+    List<ResponseCommentDto> getAllLikeCommentsByUser(String username);
+    List<ResponseRecommentDto> getAllRecommentByUser(String username);
+    List<ResponseRecommentDto> getAllLikeRecommentByUser(String username);
 }

@@ -31,7 +31,7 @@ public class TestApiController {
 
     @GetMapping("/test/post")
     public ResponseDto<String> postAll(HttpServletRequest request){
-        User user = getUser(request);
+        User user = userRepository.findByUsername(getUsernameByRequest(request)).orElseThrow();
         RequestBoardDto requestBoardDto = new RequestBoardDto("제목테스트", "내용테스트", user, "");
         RequestCommentDto requestCommentDto = new RequestCommentDto("코멘트내용테스트", user, 1);
         RequestRecommentDto requestRecommentDto = new RequestRecommentDto("리코멘트내용테스트", user, 1);
@@ -44,50 +44,15 @@ public class TestApiController {
 
     @GetMapping("/test/like")
     public ResponseDto<String> likeAll(HttpServletRequest request){
-        User user = getUser(request);
+        User user = userRepository.findByUsername(getUsernameByRequest(request)).orElseThrow();
         likeService.likeBoard(1, user);
         likeService.likeComment(1, user);
         likeService.likeRecomment(1, user);
         return new ResponseDto<>(HttpStatus.OK, "완료");
     }
 
-    @GetMapping("/test/user/boards") // /api/user/boards
-    public List<ResponseBoardDto> getBoards(HttpServletRequest request){
+    private String getUsernameByRequest(HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);
-        String username = requestToken.getUsername().orElseThrow(); // String 형을 반환을 해요
-        User user = userRepository.findByUsername(username).orElseThrow(); // Users 객체를 반환을 해요
-
-        return userService.getAllBoardsByUser(getUser(request));
-    }
-
-    @GetMapping("/test/user/like/boards") // /api/user/like/boards
-    public List<ResponseBoardDto> getLikeBoards(HttpServletRequest request){
-        return userService.getAllLikeBoardsByUser(getUser(request));
-    }
-
-    @GetMapping("/test/user/comments") // /api/user/comments
-    public List<ResponseCommentDto> getComments(HttpServletRequest request){
-        return userService.getAllCommentsByUser(getUser(request));
-    }
-
-    @GetMapping("/test/user/like/comments") // /api/user/like/comments
-    public List<ResponseCommentDto> getLikeComments(HttpServletRequest request){
-        return userService.getAllLikeCommentsByUser(getUser(request));
-    }
-
-    @GetMapping("/test/user/recomments") // /api/user/recomments
-    public List<ResponseRecommentDto> getRecomments(HttpServletRequest request){
-        return userService.getAllRecommentByUser(getUser(request));
-    }
-
-    @GetMapping("/test/user/like/recomments") // /api/user/like/recomments
-    public List<ResponseRecommentDto> getLikeRecomments(HttpServletRequest request){
-        return userService.getAllLikeRecommentByUser(getUser(request));
-    }
-
-    private User getUser(HttpServletRequest request){
-        RequestToken requestToken = new RequestToken(request);
-        String username = requestToken.getUsername().orElseThrow(()->new IllegalArgumentException("Can not find username"));
-        return userRepository.findByUsername(username).orElseThrow();
+        return requestToken.getUsername().orElseThrow();
     }
 }

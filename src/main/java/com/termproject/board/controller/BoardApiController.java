@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class BoardApiController {
@@ -20,35 +21,48 @@ public class BoardApiController {
     @Autowired
     private AwsS3ServiceImpl awsS3Service;
 
+    // 게시글 단일 조회
     @GetMapping("/api/board/{boardId}")
     public ResponseDto<ResponseBoardDto> getBoard(@PathVariable long boardId){
         return boardService.getBoardDtoByboardId(boardId);
     }
 
+    // 게시글 전체 조회
+    @GetMapping("/api/boards")
+    public ResponseDto<List<ResponseBoardDto>> getAllBoards(){
+        List<ResponseBoardDto> response = boardService.getAllBoardDto();
+        return new ResponseDto<>(HttpStatus.OK, response);
+    }
+
+    // 게시글 좋아요
     @GetMapping("/api/board/{boardId}/like")
     public ResponseDto<String> likeBoard(@PathVariable long boardId, HttpServletRequest request){
         int boardLikes = boardService.likeBoardByBoardId(boardId, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, "좋아요 개수 : " + boardLikes);
     }
 
+    // 게시글 좋아요 취소
     @GetMapping("/api/board/{boardId}/like/cancel")
     public ResponseDto<String> likeCancelBoard(@PathVariable long boardId, HttpServletRequest request){
         int boardLikes = boardService.likeCancelBoardByBoardId(boardId, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, "좋아요 개수 : " + boardLikes);
     }
 
+    // 게시글 작성
     @PostMapping("/api/board")
     public ResponseDto<String> postBoard(@RequestBody RequestBoardDto dto, HttpServletRequest request){
         boardService.postBoard(dto, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, "게시글 작성 완료");
     }
 
+    // 이미지 업로드
     @PostMapping("/api/board/upload")
     public ResponseDto<String> postImageInBoard(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
         String url = awsS3Service.uploadFileV1(file, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, url);
     }
 
+    // 게시글 내 댓글 작성
     @PostMapping("/api/board/{boardId}/comment")
     public ResponseDto<String> postComment(@RequestBody RequestCommentDto dto, @PathVariable long boardId, HttpServletRequest request){
         dto.setBoardId(boardId);
@@ -56,13 +70,13 @@ public class BoardApiController {
         return new ResponseDto<>(HttpStatus.OK, String.format("%d번 게시글에 대한 댓글 작성 완료", dto.getBoardId()));
     }
 
-    @PostMapping("/api/board/{boardId}/comment/{commentId}/Recomment")
+    // 댓글 내 대댓글 작성
+    @PostMapping("/api/board/{boardId}/comment/{commentId}/recomment")
     public ResponseDto<String> postRecomment(@RequestBody RequestRecommentDto dto, @PathVariable long commentId,  HttpServletRequest request){
         dto.setCommentId(commentId);
         boardService.postRecomment(dto, getUsernameByRequest(request));
         return new ResponseDto<>(HttpStatus.OK, String.format("%d번 댓글에 대한 대댓글 작성 완료", dto.getCommentId()));
     }
-
 
     private String getUsernameByRequest(HttpServletRequest request){
         RequestToken requestToken = new RequestToken(request);

@@ -45,7 +45,7 @@ public class AwsS3ServiceImpl {
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
-            throw new IOException();
+            throw new IOException(ExceptionNamingHandler.FAILED_SAVED);
         }
 
 
@@ -56,42 +56,9 @@ public class AwsS3ServiceImpl {
 
     private void validateFileExists(MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {
-            throw new IOException();
+            throw new IOException(ExceptionNamingHandler.FAILED_SAVED);
         }
     }
-
-
-//    @Transactional
-//    public List<String> uploadFile(User user, Notice notice, List<MultipartFile> multipartFile) {
-//
-//        List<String> fileNameList = new ArrayList<>();
-//
-//        multipartFile.forEach(file -> {
-//            String fileName = createFileName(file.getOriginalFilename());
-//            ObjectMetadata objectMetadata = new ObjectMetadata();
-//            objectMetadata.setContentLength(file.getSize());
-//            objectMetadata.setContentType(file.getContentType());
-//
-//            try(InputStream inputStream = file.getInputStream()) {
-//                amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-//                        .withCannedAcl(CannedAccessControlList.PublicRead));
-//            } catch(IOException e) {
-//                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
-//            }
-//            // 원본파일이름과 변경된 파일이름을 DB에 저장 -> 다운로드시 필요
-//            NoticeFile noticefile = NoticeFile.builder()
-//                    .newFileName(fileName)
-//                    .originFileName(file.getOriginalFilename())
-//                    .user(user)
-//                    .notice(notice)
-//                    .build();
-//
-//            noticeFileRepository.save(noticefile);
-//
-//            fileNameList.add(fileName);
-//        });
-//        return fileNameList;
-//    }
 
 
 }
