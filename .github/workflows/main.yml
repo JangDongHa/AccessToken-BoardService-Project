@@ -16,6 +16,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ${{ env.RESOURCE_PATH }} 
+        env:
+          spring.datasource.username: ${{ secrets.AWS_RDS_USERNAME }} 
+          spring.datasource.password: ${{ secrets.AWS_RDS_PASSWORD }} 
       - name: Checkout
         uses: actions/checkout@v2
 
