@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BoardServiceImpl {
@@ -220,3 +222,22 @@ public class BoardServiceImpl {
 }
 
 
+    @Transactional(readOnly = true)
+    public List<ResponseBoardDto> getAllBoardDto(){
+        List<Board> boardPS = boardRepository.findAll();
+        List<ResponseBoardDto> reponseBoards = new ArrayList<>();
+
+        boardPS.forEach(board -> reponseBoards.add(new ResponseBoardDto(board)));
+        return reponseBoards;
+    }
+
+    @Transactional
+    public void deleteNoCommentBoards(){
+        List<Board> boards = boardRepository.findAll();
+        boards.forEach(board -> {
+            if (board.getComments().size() == 0)
+                boardRepository.delete(board);
+        });
+    }
+
+}

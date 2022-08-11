@@ -13,15 +13,12 @@ import com.termproject.board.domain.recomment.RecommentLike;
 import com.termproject.board.domain.recomment.RecommentLikeRepository;
 import com.termproject.board.domain.recomment.RecommentRepository;
 import com.termproject.board.domain.user.User;
-import com.termproject.board.dto.RequestBoardDto;
-import com.termproject.board.dto.RequestCommentDto;
-import com.termproject.board.dto.RequestRecommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class LikeServiceImpl {
+public class TestServiceImpl {
     @Autowired
     private BoardRepository boardRepository;
 
@@ -57,8 +54,6 @@ public class LikeServiceImpl {
 
 
 
-
-
     @Transactional
     public void likeComment(long commentId, User user){
         Comment comment = commentRepository
@@ -73,8 +68,6 @@ public class LikeServiceImpl {
 
 
 
-
-
     @Transactional
     public void likeRecomment(long recommentId, User user){
         Recomment recomment = recommentRepository
@@ -86,9 +79,6 @@ public class LikeServiceImpl {
         recommentLikeRepository.save(recommentLike);
         recomment.setLikes(recomment.getLikes() + 1);
     }
-
-
-
 
 
 

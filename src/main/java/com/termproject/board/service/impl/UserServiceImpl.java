@@ -39,13 +39,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private BoardRepository boardRepository;
-
-    @Autowired
     private BoardLikeRepository boardLikeRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
 
     @Autowired
     private CommentLikeRepository commentLikeRepository;
@@ -94,7 +88,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseBoardDto> getAllBoardsByUser(User user){
+    public List<ResponseBoardDto> getAllBoardsByUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<ResponseBoardDto> responseBoards = new ArrayList<>();
         boards.forEach(board -> responseBoards.add(new ResponseBoardDto(board)));
@@ -104,7 +99,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseBoardDto> getAllLikeBoardsByUser(User user){
+    public List<ResponseBoardDto> getAllLikeBoardsByUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
         List<BoardLike> boardlikes = boardLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like boards by user"));
         List<Board> boards = new ArrayList<>();
         boardlikes.forEach(boardLike -> boards.add(boardLike.getBoard()));
@@ -116,7 +112,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseCommentDto> getAllCommentsByUser(User user){
+    public List<ResponseCommentDto> getAllCommentsByUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
         List<Board> boards = userRepository.findById(user.getId()).orElseThrow(()->new IllegalArgumentException("Can not find boards")).getBoards();
         List<Comment> comments = new ArrayList<>();
         for (int i = 0; i < boards.size(); i++) {
@@ -130,7 +127,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseCommentDto> getAllLikeCommentsByUser(User user){
+    public List<ResponseCommentDto> getAllLikeCommentsByUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
         List<CommentLike> commentLikes = commentLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like comments by user"));
         List<Comment> comments = new ArrayList<>();
         commentLikes.forEach(commentLike -> comments.add(commentLike.getComment()));
@@ -142,7 +140,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseRecommentDto> getAllRecommentByUser(User user){
+    public List<ResponseRecommentDto> getAllRecommentByUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
         List<Recomment> recomments = recommentRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find recomments by user"));
         List<ResponseRecommentDto> responseRecomments = new ArrayList<>();
 
@@ -152,7 +151,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ResponseRecommentDto> getAllLikeRecommentByUser(User user){
+    public List<ResponseRecommentDto> getAllLikeRecommentByUser(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new IllegalArgumentException(ExceptionNamingHandler.CANNOT_FIND_USERNAME));
         List<RecommentLike> recommentLikes = recommentLikeRepository.findAllByUser(user).orElseThrow(()->new IllegalArgumentException("Can not find like recomments by user"));
         List<Recomment> recomments = new ArrayList<>();
         recommentLikes.forEach(recommentLike -> recomments.add(recommentLike.getRecomment()));
