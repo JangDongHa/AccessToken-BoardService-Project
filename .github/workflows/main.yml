@@ -27,14 +27,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
-        
-      - name: Setup MySQL
-        uses: samin/mysql-action@v1
-        with:
-          character set server: 'utf8' 
-          mysql database: 'test-mysql'
-          mysql user: 'dong'
-          mysql password: ${{ secrets.AWS_RDS_PASSWORD }} 
 
         # [2]
       - name: Build with Gradle
